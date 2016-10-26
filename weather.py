@@ -2,7 +2,8 @@ import json
 import urllib
 
 apikey='insertvaluehere' >> get from openweathermap!
-grab_url='http://api.openweathermap.org/data/2.5/weather?id=6174041&units=metric&appid='+apikey
+city_id='######' >> get from openweathermap!
+grab_url='http://api.openweathermap.org/data/2.5/weather?id='+city_id+'&units=metric&appid='+apikey
 url=urllib.urlopen(grab_url)
 data=json.load(url)
 url.close()
