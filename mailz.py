@@ -20,7 +20,6 @@ targets = open('targets.txt', "rb")
 
 def mailme():
     for line in targets:
-        line = line.replace('\\r\\n', '')
         encodedTarget = base64.urlsafe_b64encode('%s' % line)
         msg = MIMEMultipart('alternative')
         m_source = '<sender@domain.com>'
