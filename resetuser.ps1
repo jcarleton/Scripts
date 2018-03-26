@@ -9,16 +9,22 @@
 
 #Var to define how many days threshold
 
-$NumberDays = 31
+$NumberDays = 28
 
 #Loop through the list
 
-Get-Content C:\Temp\reset-users.txt | ForEach-Object {	
-	Get-ADUser -identity $user -properties passwordlastset | select samAccountname,passwordlastset
-	If ($(((Get-Date) - $User.PasswordLastSet).Days) -gt $NumberDays) {
-		Set-aduser $User.samAccountname -changepasswordatlogon $true
-		echo "$User password marked for change!"}
-	Else {
-	echo "$User has already changed the password at notification!"    
+Get-Content C:\Temp\reset-users.txt | ForEach-Object {
+	$Target = Get-ADUser -identity $_ -properties passwordlastset | select samAccountname,passwordlastset
+	If ($Target.passwordlastset -eq $null) {
+	echo $Target.samAccountname "has never set a password?!`n`n"
 	}
-}
+	Else {
+	If ($((Get-Date) - $Target.PasswordLastSet).Days -gt $NumberDays) {
+		Set-aduser $Target.samAccountname -changepasswordatlogon $true
+		echo $Target.samAccountname "password marked for change!`n`n"
+		}
+	Else {
+	echo $Target.samAccountname "has already changed the password at notification!`n`n"    
+	}
+	}
+	}
